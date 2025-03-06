@@ -1,0 +1,210 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-rgb: 255, 255, 255;
+  --primary-color: 79, 70, 229; /* indigo-600 */
+  --primary-color-dark: 99, 102, 241; /* indigo-500 - brighter for dark mode */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 235, 235, 235;
+    --background-rgb: 30, 30, 40;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background-color: rgb(var(--background-rgb));
+}
+
+/* Add specific input field styling to ensure text is visible */
+input, textarea, select {
+  color: rgb(30, 30, 30);
+  background-color: rgb(255, 255, 255);
+}
+
+/* ReactQuill editor styling */
+.quill-container .ql-editor {
+  min-height: 150px;
+  background-color: white;
+  color: rgb(30, 30, 30);
+}
+
+.quill-container .ql-toolbar {
+  background-color: #f0f0f0;
+  border-color: #ddd;
+}
+
+/* Fix for dropdown positioning issues */
+.quill-container .ql-toolbar .ql-picker-options {
+  z-index: 20 !important; /* Ensure dropdowns appear above content */
+}
+
+/* Ensure proper visibility of select elements */
+.ql-picker-label, .ql-picker-options {
+  position: absolute !important;
+  z-index: 10 !important;
+}
+
+.quill-container .ql-toolbar button svg path,
+.quill-container .ql-toolbar button svg line,
+.quill-container .ql-toolbar button svg polyline {
+  stroke: #444 !important;
+}
+
+.quill-container .ql-toolbar .ql-picker-label {
+  color: #444;
+}
+
+/* In dark mode, adjust form controls */
+@media (prefers-color-scheme: dark) {
+  input, textarea, select {
+    color-scheme: dark;
+    background-color: rgb(64, 64, 64);
+    border-color: rgb(75, 85, 99);
+    color: rgb(229, 231, 235);
+  }
+  
+  .card {
+    background-color: rgb(31, 41, 55);
+    border-color: rgb(55, 65, 81);
+  }
+  
+  .ql-editor {
+    background-color: rgb(50, 50, 60) !important;
+    color: rgb(245, 245, 245) !important;
+  }
+  
+  .ql-toolbar {
+    background-color: rgb(60, 60, 70) !important;
+    border-color: rgb(85, 95, 109) !important;
+  }
+  
+  .ql-toolbar button,
+  .ql-toolbar .ql-picker {
+    filter: invert(0.8);
+    color: rgb(245, 245, 245) !important;
+  }
+  
+  .ql-toolbar button svg path,
+  .ql-toolbar button svg line,
+  .ql-toolbar button svg polyline {
+    stroke: rgb(245, 245, 245) !important;
+  }
+  
+  .ql-toolbar .ql-picker-options {
+    background-color: rgb(60, 60, 70) !important;
+    border-color: rgb(85, 95, 109) !important;
+    color: rgb(245, 245, 245) !important;
+  }
+  
+  .ql-toolbar .ql-picker-item {
+    color: rgb(245, 245, 245) !important;
+  }
+
+  .ql-toolbar .ql-picker-item:hover {
+    color: rgb(255, 255, 255) !important;
+    background-color: rgb(75, 75, 85) !important;
+  }
+  
+  /* Make the editor toolbar buttons more visible */
+  .ql-formats button:hover,
+  .ql-formats .ql-picker:hover {
+    background-color: rgb(75, 75, 85) !important;
+  }
+  
+  /* Make the placeholder text more visible */
+  .ql-editor.ql-blank::before {
+    color: rgb(180, 180, 180) !important;
+  }
+  
+  .btn-primary {
+    background-color: rgb(29, 78, 216);
+    color: white;
+  }
+  
+  .btn-secondary {
+    background-color: rgb(75, 85, 99);
+    color: white;
+  }
+  
+  .input-field {
+    background-color: rgb(55, 65, 81);
+    border-color: rgb(75, 85, 99);
+  }
+  
+  .card {
+    background-color: rgb(31, 41, 55);
+    border-color: rgb(55, 65, 81);
+  }
+  
+  .combobox-option {
+    background-color: rgb(31, 41, 55);
+  }
+  
+  .combobox-option-active {
+    background-color: rgb(55, 65, 81);
+  }
+  
+  .combobox-option-inactive {
+    background-color: rgb(31, 41, 55);
+  }
+  
+  .combobox-options {
+    background-color: rgb(31, 41, 55);
+    border-color: rgb(75, 85, 99);
+  }
+  
+  .combobox-new-option {
+    border-color: rgb(75, 85, 99);
+    background-color: rgb(31, 41, 55);
+  }
+  
+  /* Add table-specific dark mode styles */
+  .dark\:hover\:bg-gray-750:hover {
+    background-color: rgb(55, 65, 81);
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary-600 hover:bg-primary-700 text-white py-2 px-4 rounded transition-colors;
+  }
+  
+  .btn-secondary {
+    @apply bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded transition-colors dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200;
+  }
+  
+  .input-field {
+    @apply w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary-500;
+  }
+  
+  .card {
+    @apply bg-white dark:bg-gray-800 rounded-lg shadow-md p-6;
+  }
+  
+  /* Combobox Styles */
+  .combobox-option {
+    @apply cursor-default select-none relative py-2 pl-3 pr-9;
+  }
+  
+  .combobox-option-active {
+    @apply bg-indigo-100 text-indigo-900 dark:bg-indigo-900 dark:text-indigo-100;
+  }
+  
+  .combobox-option-inactive {
+    @apply text-gray-900 dark:text-gray-100;
+  }
+  
+  .combobox-options {
+    @apply absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white dark:bg-gray-700 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm;
+  }
+  
+  .combobox-new-option {
+    @apply bg-green-100 text-green-900 dark:bg-green-900 dark:text-green-100 border-t border-gray-200 dark:border-gray-600 pt-2 mt-1;
+  }
+}
