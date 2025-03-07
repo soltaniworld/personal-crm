@@ -37,7 +37,16 @@ export interface Interaction {
   date: Date;
   createdAt?: Date;
   updatedAt?: Date;
+  contactExists?: boolean; // Add this line
 }
+
+const removeUndefinedValues = (obj: Record<string, any>) => {
+  Object.keys(obj).forEach(key => {
+    if (obj[key] === undefined) {
+      delete obj[key];
+    }
+  });
+};
 
 // Contacts
 export const getContacts = async (userId: string): Promise<Contact[]> => {
@@ -70,8 +79,10 @@ export const getContacts = async (userId: string): Promise<Contact[]> => {
     return contacts;
   } catch (error) {
     console.error('Error fetching contacts:', error);
-    // Re-throw the error with more context
-    throw new Error(`Failed to fetch contacts: ${error.message}`);
+    if (error instanceof Error) {
+      throw new Error(`Failed to fetch contacts: ${error.message}`);
+    }
+    throw error;
   }
 };
 
@@ -181,7 +192,10 @@ export const getContact = async (contactId: string): Promise<Contact | null> => 
     return contact;
   } catch (err) {
     console.error('Error in getContact function:', err);
-    throw new Error(`Failed to retrieve contact: ${err.message}`);
+    if (err instanceof Error) {
+      throw new Error(`Failed to retrieve contact: ${err.message}`);
+    }
+    throw err;
   }
 };
 
@@ -209,12 +223,7 @@ export const addContact = async (contact: Contact): Promise<string> => {
       updatedAt: now
     };
     
-    // Remove any undefined values
-    Object.keys(contactData).forEach(key => {
-      if (contactData[key] === undefined) {
-        delete contactData[key];
-      }
-    });
+    removeUndefinedValues(contactData);
     
     console.log('Prepared contact data for Firestore:', contactData);
     const docRef = await addDoc(collection(db, 'contacts'), contactData);
@@ -224,7 +233,7 @@ export const addContact = async (contact: Contact): Promise<string> => {
   } catch (error) {
     console.error('Error adding contact to Firestore:', error);
     
-    if (error.message) {
+    if (error instanceof Error) {
       error.message = `Failed to add contact: ${error.message}`;
     }
     
@@ -278,7 +287,10 @@ export const getInteractions = async (userId: string): Promise<Interaction[]> =>
     return interactions;
   } catch (error) {
     console.error('Error fetching interactions:', error);
-    throw new Error(`Failed to fetch interactions: ${error.message}`);
+    if (error instanceof Error) {
+      throw new Error(`Failed to fetch interactions: ${error.message}`);
+    }
+    throw error;
   }
 };
 
@@ -321,7 +333,10 @@ export const getContactInteractions = async (contactId: string): Promise<Interac
     return interactions;
   } catch (err) {
     console.error('Error fetching contact interactions:', err);
-    throw new Error(`Failed to fetch interactions for contact: ${err.message}`);
+    if (err instanceof Error) {
+      throw new Error(`Failed to fetch interactions for contact: ${err.message}`);
+    }
+    throw err;
   }
 };
 
@@ -366,7 +381,10 @@ export const getInteraction = async (interactionId: string): Promise<Interaction
     return interaction;
   } catch (err) {
     console.error('Error in getInteraction function:', err);
-    throw new Error(`Failed to retrieve interaction: ${err.message}`);
+    if (err instanceof Error) {
+      throw new Error(`Failed to retrieve interaction: ${err.message}`);
+    }
+    throw err;
   }
 };
 
@@ -411,12 +429,7 @@ export const addInteraction = async (interaction: Interaction): Promise<string> 
       updatedAt: now
     };
     
-    // Remove any undefined values
-    Object.keys(interactionData).forEach(key => {
-      if (interactionData[key] === undefined) {
-        delete interactionData[key];
-      }
-    });
+    removeUndefinedValues(interactionData);
     
     console.log('Prepared interaction data for Firestore:', interactionData);
     const docRef = await addDoc(collection(db, 'interactions'), interactionData);
@@ -426,7 +439,7 @@ export const addInteraction = async (interaction: Interaction): Promise<string> 
   } catch (error) {
     console.error('Error adding interaction to Firestore:', error);
     
-    if (error.message) {
+    if (error instanceof Error) {
       error.message = `Failed to add interaction: ${error.message}`;
     }
     
@@ -481,6 +494,9 @@ export const getRawContactData = async (contactId: string): Promise<any> => {
     };
   } catch (err) {
     console.error('Error in getRawContactData function:', err);
-    throw new Error(`Failed to retrieve raw contact data: ${err.message}`);
+    if (err instanceof Error) {
+      throw new Error(`Failed to retrieve raw contact data: ${err.message}`);
+    }
+    throw err;
   }
-}; 
+};
