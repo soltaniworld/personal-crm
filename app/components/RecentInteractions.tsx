@@ -6,6 +6,23 @@ import { format } from 'date-fns';
 import { useAuth } from '../lib/authContext';
 import { getInteractions, Interaction } from '../lib/db';
 
+// Function to create a truncated preview of rich text notes
+const createNotesPreview = (notes: string | undefined, maxLength: number = 75) => {
+  if (!notes) return null;
+  
+  // Create a temporary div to parse the HTML and extract text
+  const div = document.createElement('div');
+  div.innerHTML = notes;
+  const textContent = div.textContent || div.innerText || '';
+  
+  // Create a truncated preview
+  const truncated = textContent.length > maxLength 
+    ? textContent.substring(0, maxLength) + '...' 
+    : textContent;
+  
+  return truncated;
+};
+
 const RecentInteractions = () => {
   const [interactions, setInteractions] = useState<Interaction[]>([]);
   const [visibleInteractions, setVisibleInteractions] = useState<Interaction[]>([]);
@@ -103,40 +120,40 @@ const RecentInteractions = () => {
 
   return (
     <div>
-      <div className="overflow-x-auto">
-        <table className="w-full">
+      <div className="overflow-x-auto -mx-4 sm:mx-0">
+        <table className="w-full table-auto">
           <thead className="bg-gray-100 dark:bg-gray-700">
             <tr>
               <th className="py-2 px-3 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Title</th>
               <th className="py-2 px-3 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Contact</th>
-              <th className="py-2 px-3 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Date</th>
+              <th className="py-2 px-3 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider max-w-[80px]">Date</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
             {visibleInteractions.map((interaction) => (
               <tr key={interaction.id} className="hover:bg-gray-50 dark:hover:bg-gray-750">
-                <td className="py-2 px-3 whitespace-nowrap">
+                <td className="py-2 px-3">
                   <Link 
                     href={`/interactions/${interaction.id}`}
                     className="text-primary-600 dark:text-primary-400 hover:underline font-medium"
                   >
-                    {interaction.title}
+                    <span className="line-clamp-1">{interaction.title}</span>
                   </Link>
                 </td>
-                <td className="py-2 px-3 whitespace-nowrap">
+                <td className="py-2 px-3">
                   {interaction.contactName && interaction.contactId ? (
                     <Link 
                       href={`/contacts/${interaction.contactId}`}
                       className="text-primary-600 dark:text-primary-400 hover:underline"
                     >
-                      {interaction.contactName}
+                      <span className="line-clamp-1">{interaction.contactName}</span>
                     </Link>
                   ) : (
                     <span className="text-gray-500 dark:text-gray-400">Unknown</span>
                   )}
                 </td>
-                <td className="py-2 px-3 whitespace-nowrap text-gray-700 dark:text-gray-300">
-                  {format(interaction.date, 'MMM d, yyyy')}
+                <td className="py-2 px-3 text-gray-700 dark:text-gray-300 max-w-[80px]">
+                  {format(interaction.date, 'MM/dd/yy')}
                 </td>
               </tr>
             ))}
@@ -158,4 +175,4 @@ const RecentInteractions = () => {
   );
 };
 
-export default RecentInteractions; 
+export default RecentInteractions;

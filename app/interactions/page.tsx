@@ -7,6 +7,23 @@ import { useAuth } from '../lib/authContext';
 import { getInteractions, Interaction, deleteInteraction } from '../lib/db';
 import ProtectedRoute from '../components/ProtectedRoute';
 
+// Function to create a truncated preview of rich text notes
+const createNotesPreview = (notes: string | undefined, maxLength: number = 100) => {
+  if (!notes) return null;
+  
+  // Create a temporary div to parse the HTML and extract text
+  const div = document.createElement('div');
+  div.innerHTML = notes;
+  const textContent = div.textContent || div.innerText || '';
+  
+  // Create a truncated preview
+  const truncated = textContent.length > maxLength 
+    ? textContent.substring(0, maxLength) + '...' 
+    : textContent;
+  
+  return truncated;
+};
+
 export default function InteractionsPage() {
   const [interactions, setInteractions] = useState<Interaction[]>([]);
   const [loading, setLoading] = useState(true);
@@ -71,9 +88,9 @@ export default function InteractionsPage() {
   return (
     <ProtectedRoute>
       <div className="space-y-6">
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-3">
           <h1 className="text-2xl font-bold">Interactions</h1>
-          <Link href="/interactions/new" className="btn-primary">
+          <Link href="/interactions/new" className="btn-primary w-full sm:w-auto">
             Log New Interaction
           </Link>
         </div>
@@ -124,55 +141,57 @@ export default function InteractionsPage() {
             </Link>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full">
+          <div className="overflow-x-auto -mx-4 sm:mx-0">
+            <table className="min-w-full table-auto">
               <thead className="bg-gray-100 dark:bg-gray-700">
                 <tr>
                   <th className="py-2 px-3 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Title</th>
                   <th className="py-2 px-3 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Contact</th>
-                  <th className="py-2 px-3 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Date</th>
+                  <th className="py-2 px-3 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider max-w-[80px]">Date</th>
                   <th className="py-2 px-3 text-right text-xs font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                 {interactions.map((interaction) => (
                   <tr key={interaction.id} className="hover:bg-gray-50 dark:hover:bg-gray-750">
-                    <td className="py-2 px-3 whitespace-nowrap">
+                    <td className="py-2 px-3">
                       <Link 
                         href={`/interactions/${interaction.id}`}
                         className="text-primary-600 dark:text-primary-400 hover:underline font-medium"
                       >
-                        {interaction.title}
+                        <span className="line-clamp-1">{interaction.title}</span>
                       </Link>
                     </td>
-                    <td className="py-2 px-3 whitespace-nowrap">
+                    <td className="py-2 px-3">
                       {interaction.contactName && interaction.contactId ? (
                         <Link 
                           href={`/contacts/${interaction.contactId}`}
                           className="text-primary-600 dark:text-primary-400 hover:underline"
                         >
-                          {interaction.contactName}
+                          <span className="line-clamp-1">{interaction.contactName}</span>
                         </Link>
                       ) : (
-                        <span className="text-gray-500 dark:text-gray-400">Unknown Contact</span>
+                        <span className="text-gray-500 dark:text-gray-400">Unknown</span>
                       )}
                     </td>
-                    <td className="py-2 px-3 whitespace-nowrap text-gray-700 dark:text-gray-300">
-                      {format(interaction.date, 'MMM d, yyyy')}
+                    <td className="py-2 px-3 text-gray-700 dark:text-gray-300 max-w-[80px]">
+                      {format(interaction.date, 'MM/dd/yy')}
                     </td>
-                    <td className="py-2 px-3 whitespace-nowrap text-right space-x-2">
-                      <Link 
-                        href={`/interactions/${interaction.id}/edit`}
-                        className="text-blue-600 dark:text-blue-400 hover:underline"
-                      >
-                        Edit
-                      </Link>
-                      <button
-                        onClick={() => interaction.id && handleDelete(interaction.id)}
-                        className="text-red-600 dark:text-red-400 hover:underline"
-                      >
-                        Delete
-                      </button>
+                    <td className="py-2 px-3 text-right">
+                      <div className="flex flex-wrap justify-end gap-2">
+                        <Link 
+                          href={`/interactions/${interaction.id}/edit`}
+                          className="text-blue-600 dark:text-blue-400 hover:underline"
+                        >
+                          Edit
+                        </Link>
+                        <button
+                          onClick={() => interaction.id && handleDelete(interaction.id)}
+                          className="text-red-600 dark:text-red-400 hover:underline"
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -183,4 +202,4 @@ export default function InteractionsPage() {
       </div>
     </ProtectedRoute>
   );
-} 
+}

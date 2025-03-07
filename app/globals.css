@@ -39,6 +39,11 @@ input, textarea, select {
   border-color: #ddd;
 }
 
+/* Hide the header/equals dropdown menu in ReactQuill */
+.ql-toolbar .ql-picker.ql-header {
+  display: none !important;
+}
+
 /* Fix for dropdown positioning issues */
 .quill-container .ql-toolbar .ql-picker-options {
   z-index: 20 !important; /* Ensure dropdowns appear above content */
@@ -47,7 +52,6 @@ input, textarea, select {
 }
 
 /* Format picker needs special handling */
-.ql-toolbar .ql-picker.ql-header .ql-picker-options, 
 .ql-toolbar .ql-picker.ql-font .ql-picker-options,
 .ql-toolbar .ql-picker.ql-size .ql-picker-options {
   top: auto !important; /* Override for these specific pickers */
@@ -68,6 +72,61 @@ input, textarea, select {
 
 .quill-container .ql-toolbar .ql-picker-label {
   color: #444;
+}
+
+/* Enhanced styling for rendered rich text content from ReactQuill */
+.prose ul, .prose ol {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  padding-left: 1.5em;
+}
+
+.prose ul {
+  list-style-type: disc;
+}
+
+.prose ul ul {
+  list-style-type: circle;
+}
+
+.prose ul ul ul {
+  list-style-type: square;
+}
+
+.prose ol {
+  list-style-type: decimal;
+}
+
+.prose ol ol {
+  list-style-type: lower-alpha;
+}
+
+.prose ol ol ol {
+  list-style-type: lower-roman;
+}
+
+.prose li {
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+}
+
+.prose ul > li::before {
+  display: none;
+}
+
+/* Specific styles for ReactQuill-generated list content */
+.prose .ql-bullet, 
+.prose .ql-list {
+  display: list-item;
+}
+
+/* Ensure proper styling of bullet points and lists in dark mode */
+.dark .prose ul {
+  color: rgb(229, 231, 235);
+}
+
+.dark .prose ol {
+  color: rgb(229, 231, 235);
 }
 
 /* In dark mode, adjust form controls */
