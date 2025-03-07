@@ -228,13 +228,13 @@ export default function InteractionsPage() {
                       <div className="flex flex-wrap justify-end gap-2">
                         <Link 
                           href={`/interactions/${interaction.id}/edit`}
-                          className="text-blue-600 dark:text-blue-400 hover:underline"
+                          className="bg-gray-200 hover:bg-gray-300 text-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200 py-1 px-3 rounded transition-colors inline-flex items-center justify-center h-8"
                         >
                           Edit
                         </Link>
                         <button
                           onClick={() => interaction.id && handleDelete(interaction.id)}
-                          className="text-red-600 dark:text-red-400 hover:underline"
+                          className="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded transition-colors inline-flex items-center justify-center h-8"
                         >
                           Delete
                         </button>

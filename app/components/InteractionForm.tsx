@@ -56,13 +56,24 @@ const InteractionForm = ({
 
   // Format today's date and set it as default
   useEffect(() => {
-    // Format the date as YYYY-MM-DD for the date input
-    if (!interaction?.date) {
+    // Format the date for the input field - must be in YYYY-MM-DD format for the date input
+    if (interaction?.date) {
+      // When editing an existing interaction, format the date properly
+      const dateObj = new Date(interaction.date);
+      const formattedDate = format(dateObj, 'yyyy-MM-dd');
+      
+      // Update the actual DOM input value 
+      const dateInput = document.getElementById('date') as HTMLInputElement;
+      if (dateInput) {
+        dateInput.value = formattedDate;
+      }
+    } else {
+      // For new interactions
       const today = new Date();
       const formattedDate = format(today, 'yyyy-MM-dd');
       setValue('date', today);
       
-      // Need to update the actual DOM input value since React Hook Form doesn't always update it
+      // Update the actual DOM input value
       const dateInput = document.getElementById('date') as HTMLInputElement;
       if (dateInput) {
         dateInput.value = formattedDate;

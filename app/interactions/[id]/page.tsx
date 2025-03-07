@@ -104,11 +104,11 @@ export default function InteractionDetailPage() {
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-bold">{interaction.title}</h1>
-          <div className="space-x-2">
-            <Link href={`/interactions/${interactionId}/edit`} className="btn-secondary">
+          <div className="space-x-2 flex">
+            <Link href={`/interactions/${interactionId}/edit`} className="btn-secondary inline-flex items-center justify-center h-10">
               Edit
             </Link>
-            <button onClick={handleDelete} className="btn-secondary bg-red-500 hover:bg-red-600 text-white">
+            <button onClick={handleDelete} className="btn-secondary bg-red-500 hover:bg-red-600 text-white inline-flex items-center justify-center h-10">
               Delete
             </button>
           </div>
