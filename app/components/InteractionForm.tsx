@@ -447,6 +447,12 @@ const InteractionForm = ({
                     </div>
                   </div>
 
+                  <div className="mt-4">
+                    <p className="text-sm text-gray-500 italic">
+                      Couldn&apos;t find the contact? Click &quot;New Contact&quot; to add them.
+                    </p>
+                  </div>
+
                   <div className="mt-4 flex justify-end space-x-3">
                     <button
                       type="button"

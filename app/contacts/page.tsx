@@ -129,6 +129,7 @@ export default function ContactsPage() {
                   <th className="py-2 px-3 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Name</th>
                   <th className="py-2 px-3 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Email</th>
                   <th className="py-2 px-3 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Phone</th>
+                  <th className="py-2 px-3 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Interactions</th>
                   <th className="py-2 px-3 text-right text-xs font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
@@ -148,6 +149,11 @@ export default function ContactsPage() {
                     </td>
                     <td className="py-2 px-3 whitespace-nowrap text-gray-700 dark:text-gray-300">
                       {contact.phone || <span className="text-gray-500 dark:text-gray-400">-</span>}
+                    </td>
+                    <td className="px-4 py-2 text-center">
+                      {(!contact.interactions || contact.interactions === 0) && "Hasn't interacted yet"}
+                      {contact.interactions === 1 && '1 interaction'}
+                      {contact.interactions && contact.interactions > 1 && `${contact.interactions} interactions`}
                     </td>
                     <td className="py-2 px-3 whitespace-nowrap text-right space-x-2">
                       <Link 
@@ -172,4 +178,4 @@ export default function ContactsPage() {
       </div>
     </ProtectedRoute>
   );
-} 
+}

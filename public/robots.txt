@@ -1,0 +1,10 @@
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Disallow auth-related pages
+Disallow: /auth/*
+Disallow: /api/*
+
+# Sitemap location
+Sitemap: https://your-domain.com/sitemap.xml

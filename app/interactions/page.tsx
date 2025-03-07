@@ -203,23 +203,9 @@ export default function InteractionsPage() {
                         <span className="line-clamp-1">{interaction.title}</span>
                       </Link>
                     </td>
-                    <td className="py-2 px-3">
-                      {interaction.contactId ? (
-                        interaction.contactExists ? (
-                          <Link 
-                            href={`/contacts/${interaction.contactId}`}
-                            className="text-primary-600 dark:text-primary-400 hover:underline"
-                          >
-                            <span className="line-clamp-1">{interaction.contactName || 'Unknown Contact'}</span>
-                          </Link>
-                        ) : (
-                          <span className="text-gray-500 dark:text-gray-400 line-clamp-1">
-                            {interaction.contactName || 'Deleted Contact'}
-                          </span>
-                        )
-                      ) : (
-                        <span className="text-gray-500 dark:text-gray-400">Unknown</span>
-                      )}
+                    <td className="px-4 py-2 text-center">
+                      {!interaction.contactName && "Hasn&apos;t been linked"}
+                      {interaction.contactName && interaction.contactName}
                     </td>
                     <td className="py-2 px-3 text-gray-700 dark:text-gray-300 max-w-[80px]">
                       {format(interaction.date, 'MM/dd/yy')}

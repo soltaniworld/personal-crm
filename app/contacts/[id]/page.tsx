@@ -4,13 +4,12 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { format } from 'date-fns';
-import { getContact, Contact, getInteractions, Interaction, deleteContact, getRawContactData } from '../../lib/db';
+import { getContact, Contact, getInteractions, Interaction, deleteContact } from '../../lib/db';
 import ProtectedRoute from '../../components/ProtectedRoute';
 import { useAuth } from '../../lib/authContext';
 
 export default function ContactDetailPage() {
   const [contact, setContact] = useState<Contact | null>(null);
-  const [rawData, setRawData] = useState<any>(null);
   const [interactions, setInteractions] = useState<Interaction[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -25,38 +24,20 @@ export default function ContactDetailPage() {
     const fetchContactData = async () => {
       try {
         setLoading(true);
-        
-        console.log('Fetching contact data for ID:', contactId);
-        
-        // First try to get raw data as a fallback
-        try {
-          const raw = await getRawContactData(contactId);
-          setRawData(raw);
-          console.log('Raw contact data fetched successfully', raw);
-        } catch (rawError) {
-          console.error('Failed to fetch raw contact data:', rawError);
-        }
-        
-        // Fetch contact details
         const contactData = await getContact(contactId);
         
-        console.log('Contact data response:', contactData);
         if (!contactData) {
-          console.error('Contact not found for ID:', contactId);
           setError('Contact not found');
           return;
         }
         
         setContact(contactData);
-        console.log('Contact set successfully:', contactData);
       } catch (err: any) {
-        console.error('Error fetching contact details:', err);
         setError('Failed to load contact details. Please try again.');
       } finally {
         setLoading(false);
       }
     };
-
     fetchContactData();
   }, [contactId]);
 
@@ -69,16 +50,12 @@ export default function ContactDetailPage() {
         setInteractionsLoading(true);
         setInteractionsError(null);
         
-        console.log('Fetching all interactions for user:', user.uid);
         const allInteractions = await getInteractions(user.uid);
-        console.log('All interactions fetched:', allInteractions.length);
         
         // Filter interactions for this contact
         const contactInteractions = allInteractions.filter(
           interaction => interaction.contactId === contactId
         );
-        
-        console.log('Filtered interactions for contact:', contactInteractions.length);
         
         // Sort by date (newest first)
         contactInteractions.sort((a, b) => 
@@ -87,13 +64,11 @@ export default function ContactDetailPage() {
         
         setInteractions(contactInteractions);
       } catch (err: any) {
-        console.error('Error fetching interactions:', err);
         setInteractionsError('Unable to load interactions. Please try again.');
       } finally {
         setInteractionsLoading(false);
       }
     };
-
     if (contact) {
       fetchInteractions();
     }
@@ -103,12 +78,10 @@ export default function ContactDetailPage() {
     if (!window.confirm('Are you sure you want to delete this contact?')) {
       return;
     }
-
     try {
       await deleteContact(contactId);
       router.push('/contacts');
     } catch (err) {
-      console.error('Error deleting contact:', err);
       setError('Failed to delete contact. Please try again.');
     }
   };
@@ -139,28 +112,13 @@ export default function ContactDetailPage() {
             <div className="bg-red-50 dark:bg-red-900/30 p-4 rounded border border-red-200 dark:border-red-800 text-left">
               <h3 className="font-medium text-red-800 dark:text-red-300 mb-2">Troubleshooting:</h3>
               <ul className="list-disc pl-5 text-sm text-red-700 dark:text-red-400 space-y-1">
-                <li>Check that you have the correct contact ID: <span className="font-mono text-xs bg-red-100 dark:bg-red-800 p-1 rounded">{contactId}</span></li>
+                <li>Check that you have the correct contact ID</li>
                 <li>Verify that you have permission to access this contact</li>
                 <li>Try refreshing the page</li>
-                <li>Check your browser console for detailed error messages</li>
                 <li>If the problem persists, try logging out and back in</li>
               </ul>
-              <p className="mt-3 text-xs text-red-600 dark:text-red-400">
-                Raw Data Available: {rawData ? 'Yes' : 'No'}
-              </p>
             </div>
           </div>
-          
-          {rawData && (
-            <div className="mb-6 max-w-md mx-auto">
-              <div className="bg-yellow-50 dark:bg-yellow-900/30 p-4 rounded border border-yellow-200 dark:border-yellow-800 text-left mt-4">
-                <h3 className="font-medium text-yellow-800 dark:text-yellow-300 mb-2">Raw Contact Data:</h3>
-                <pre className="text-xs overflow-auto bg-white dark:bg-gray-800 p-2 rounded max-h-64">
-                  {JSON.stringify(rawData, null, 2)}
-                </pre>
-              </div>
-            </div>
-          )}
           
           <Link href="/contacts" className="btn-primary">
             Back to Contacts

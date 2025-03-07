@@ -1,13 +1,12 @@
 "use client";
-
-import React from 'react';
+import React, { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useAuth } from '../../lib/authContext';
 import { addInteraction, Interaction } from '../../lib/db';
 import InteractionForm from '../../components/InteractionForm';
 import ProtectedRoute from '../../components/ProtectedRoute';
 
-export default function NewInteractionPage() {
+function NewInteractionContent() {
   const { user } = useAuth();
   const searchParams = useSearchParams();
   const contactId = searchParams.get('contactId');
@@ -25,14 +24,27 @@ export default function NewInteractionPage() {
   };
 
   return (
+    <div className="max-w-2xl mx-auto">
+      <h1 className="text-2xl font-bold mb-6">Log New Interaction</h1>
+      <InteractionForm 
+        onSubmit={handleSubmit} 
+        preselectedContactId={contactId || undefined}
+      />
+    </div>
+  );
+}
+
+export default function NewInteractionPage() {
+  return (
     <ProtectedRoute>
-      <div className="max-w-2xl mx-auto">
-        <h1 className="text-2xl font-bold mb-6">Log New Interaction</h1>
-        <InteractionForm 
-          onSubmit={handleSubmit} 
-          preselectedContactId={contactId || undefined}
-        />
-      </div>
+      <Suspense fallback={
+        <div className="max-w-2xl mx-auto text-center py-10">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading...</p>
+        </div>
+      }>
+        <NewInteractionContent />
+      </Suspense>
     </ProtectedRoute>
   );
-} 
+}
