@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { format } from 'date-fns';
-import { getInteraction, Interaction, deleteInteraction } from '../../lib/db';
+import { getInteraction, getContact, Interaction, deleteInteraction } from '../../lib/db';
 import ProtectedRoute from '../../components/ProtectedRoute';
 
 export default function InteractionDetailPage() {
@@ -31,8 +31,25 @@ export default function InteractionDetailPage() {
           return;
         }
         
-        setInteraction(interactionData);
-        console.log('Interaction set successfully:', interactionData);
+        let contactExists = false;
+        
+        // If we have a contactId, fetch the latest contact name from contacts collection
+        if (interactionData.contactId) {
+          try {
+            const contact = await getContact(interactionData.contactId);
+            if (contact) {
+              // Update the interaction with the latest contact name
+              interactionData.contactName = contact.name;
+              contactExists = true;
+            }
+          } catch (err) {
+            console.error('Error fetching contact for interaction:', err);
+            // Continue even if we can't get the updated contact name
+          }
+        }
+        
+        setInteraction({...interactionData, contactExists});
+        console.log('Interaction set successfully with updated contact name:', interactionData);
       } catch (err: any) {
         console.error('Error fetching interaction details:', err);
         setError('Failed to load interaction details. Please try again.');
@@ -100,13 +117,19 @@ export default function InteractionDetailPage() {
         <div className="card">
           <div className="mb-6">
             <p className="text-sm text-gray-500 dark:text-gray-400">Contact</p>
-            {interaction.contactName && interaction.contactId ? (
-              <Link 
-                href={`/contacts/${interaction.contactId}`}
-                className="text-primary-600 dark:text-primary-400 hover:underline font-medium"
-              >
-                {interaction.contactName}
-              </Link>
+            {interaction.contactId ? (
+              interaction.contactExists ? (
+                <Link 
+                  href={`/contacts/${interaction.contactId}`}
+                  className="text-primary-600 dark:text-primary-400 hover:underline font-medium"
+                >
+                  {interaction.contactName || 'Unknown Contact'}
+                </Link>
+              ) : (
+                <span className="text-gray-700 dark:text-gray-300">
+                  {interaction.contactName || 'Deleted Contact'} <em className="text-gray-500 dark:text-gray-400 text-xs">(contact no longer exists)</em>
+                </span>
+              )
             ) : (
               <p className="text-gray-700 dark:text-gray-300">Unknown Contact</p>
             )}
@@ -136,4 +159,4 @@ export default function InteractionDetailPage() {
       </div>
     </ProtectedRoute>
   );
-} 
+}

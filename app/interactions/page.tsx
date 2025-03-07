@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { format } from 'date-fns';
 import { useAuth } from '../lib/authContext';
-import { getInteractions, Interaction, deleteInteraction } from '../lib/db';
+import { getInteractions, getContact, Interaction, deleteInteraction } from '../lib/db';
 import ProtectedRoute from '../components/ProtectedRoute';
 
 // Function to create a truncated preview of rich text notes
@@ -41,7 +41,32 @@ export default function InteractionsPage() {
         console.log('Starting to fetch interactions for user:', user.uid);
         const interactionsData = await getInteractions(user.uid);
         console.log('Interactions fetched successfully:', interactionsData.length);
-        setInteractions(interactionsData);
+        
+        // Update contact names from the contacts collection
+        const updatedInteractions = await Promise.all(
+          interactionsData.map(async (interaction) => {
+            // If we have a contactId, fetch the latest contact name
+            if (interaction.contactId) {
+              try {
+                const contact = await getContact(interaction.contactId);
+                if (contact) {
+                  // Update the contact name with the latest from contacts collection
+                  return { ...interaction, contactName: contact.name, contactExists: true };
+                } else {
+                  // Contact no longer exists
+                  return { ...interaction, contactExists: false };
+                }
+              } catch (err) {
+                console.error(`Error fetching contact for interaction ${interaction.id}:`, err);
+                return { ...interaction, contactExists: false };
+              }
+            }
+            // If no contactId or contact not found, return original interaction
+            return interaction;
+          })
+        );
+        
+        setInteractions(updatedInteractions);
       } catch (err: any) {
         console.error('Error in fetchInteractions:', err);
         
@@ -105,8 +130,24 @@ export default function InteractionsPage() {
                 if (user) {
                   setLoading(true);
                   getInteractions(user.uid)
-                    .then(data => {
-                      setInteractions(data);
+                    .then(async data => {
+                      // Update contact names
+                      const updatedData = await Promise.all(
+                        data.map(async (interaction) => {
+                          if (interaction.contactId) {
+                            try {
+                              const contact = await getContact(interaction.contactId);
+                              if (contact) {
+                                return { ...interaction, contactName: contact.name };
+                              }
+                            } catch (err) {
+                              console.error(`Error fetching contact for interaction ${interaction.id}:`, err);
+                            }
+                          }
+                          return interaction;
+                        })
+                      );
+                      setInteractions(updatedData);
                       setError(null);
                     })
                     .catch(err => {
@@ -163,13 +204,19 @@ export default function InteractionsPage() {
                       </Link>
                     </td>
                     <td className="py-2 px-3">
-                      {interaction.contactName && interaction.contactId ? (
-                        <Link 
-                          href={`/contacts/${interaction.contactId}`}
-                          className="text-primary-600 dark:text-primary-400 hover:underline"
-                        >
-                          <span className="line-clamp-1">{interaction.contactName}</span>
-                        </Link>
+                      {interaction.contactId ? (
+                        interaction.contactExists ? (
+                          <Link 
+                            href={`/contacts/${interaction.contactId}`}
+                            className="text-primary-600 dark:text-primary-400 hover:underline"
+                          >
+                            <span className="line-clamp-1">{interaction.contactName || 'Unknown Contact'}</span>
+                          </Link>
+                        ) : (
+                          <span className="text-gray-500 dark:text-gray-400 line-clamp-1">
+                            {interaction.contactName || 'Deleted Contact'}
+                          </span>
+                        )
                       ) : (
                         <span className="text-gray-500 dark:text-gray-400">Unknown</span>
                       )}
