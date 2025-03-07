@@ -42,6 +42,16 @@ input, textarea, select {
 /* Fix for dropdown positioning issues */
 .quill-container .ql-toolbar .ql-picker-options {
   z-index: 20 !important; /* Ensure dropdowns appear above content */
+  top: 100% !important; /* Position below the picker label by default */
+  bottom: auto !important; /* Reset any bottom positioning */
+}
+
+/* Format picker needs special handling */
+.ql-toolbar .ql-picker.ql-header .ql-picker-options, 
+.ql-toolbar .ql-picker.ql-font .ql-picker-options,
+.ql-toolbar .ql-picker.ql-size .ql-picker-options {
+  top: auto !important; /* Override for these specific pickers */
+  bottom: 100% !important; /* Position above the picker label */
 }
 
 /* Ensure proper visibility of select elements */
@@ -96,10 +106,12 @@ input, textarea, select {
     stroke: rgb(245, 245, 245) !important;
   }
   
+  /* Improved dark mode dropdown styling */
   .ql-toolbar .ql-picker-options {
     background-color: rgb(60, 60, 70) !important;
     border-color: rgb(85, 95, 109) !important;
     color: rgb(245, 245, 245) !important;
+    z-index: 30 !important; /* Higher z-index in dark mode */
   }
   
   .ql-toolbar .ql-picker-item {

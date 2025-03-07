@@ -204,12 +204,12 @@ const InteractionForm = ({
 
   return (
     <div className="card">
-      <h2 className="text-xl font-semibold mb-6">
+      <h2 className="text-xl font-semibold mb-6 text-gray-900 dark:text-gray-100">
         {isEditing ? 'Edit Interaction' : 'Log New Interaction'}
       </h2>
       
       {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+        <div className="bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded mb-4">
           {error}
         </div>
       )}
@@ -217,11 +217,11 @@ const InteractionForm = ({
       <form onSubmit={handleSubmit(onFormSubmit)}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div>
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="title">
+            <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" htmlFor="title">
               Title *
             </label>
             <input
-              className={`input-field ${errors.title ? 'border-red-500' : ''}`}
+              className={`input-field ${errors.title ? 'border-red-500' : ''} dark:bg-gray-800 dark:text-gray-100`}
               id="title"
               type="text"
               placeholder="Interaction Title"
@@ -233,7 +233,7 @@ const InteractionForm = ({
           </div>
           
           <div>
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="contactId">
+            <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" htmlFor="contactId">
               Contact *
             </label>
             <div className="relative">
@@ -252,7 +252,7 @@ const InteractionForm = ({
                 }}>
                   <div className="relative">
                     <Combobox.Input
-                      className={`input-field ${errors.contactId ? 'border-red-500' : ''}`}
+                      className={`input-field ${errors.contactId ? 'border-red-500' : ''} dark:bg-gray-800 dark:text-gray-100`}
                       onChange={(e) => {
                         setQuery(e.target.value);
                         if (!e.target.value) {
@@ -269,7 +269,7 @@ const InteractionForm = ({
                           key={contact.id}
                           value={contact}
                           className={({ active }) =>
-                            `combobox-option ${active ? 'combobox-option-active' : 'combobox-option-inactive'}`
+                            `combobox-option ${active ? 'combobox-option-active' : 'combobox-option-inactive'} dark:bg-gray-800 dark:text-gray-100`
                           }
                         >
                           {contact.name}
@@ -278,7 +278,7 @@ const InteractionForm = ({
                       {isNewContact && (
                         <Combobox.Option
                           value={{ name: query, userId: user?.uid || '' }}
-                          className="combobox-new-option"
+                          className="combobox-new-option dark:bg-gray-800 dark:text-gray-100"
                         >
                           <span className="flex items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -294,7 +294,7 @@ const InteractionForm = ({
               )}
               
               {preselectedContactId && (
-                <div className="input-field flex items-center text-gray-700">
+                <div className="input-field flex items-center text-gray-700 dark:text-gray-100">
                   {selectedContact ? selectedContact.name : 'Loading contact...'}
                 </div>
               )}
@@ -307,11 +307,11 @@ const InteractionForm = ({
         </div>
         
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="date">
+          <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" htmlFor="date">
             Date *
           </label>
           <input
-            className={`input-field ${errors.date ? 'border-red-500' : ''}`}
+            className={`input-field ${errors.date ? 'border-red-500' : ''} dark:bg-gray-800 dark:text-gray-100`}
             id="date"
             type="date"
             {...register('date', { required: 'Date is required' })}
@@ -322,7 +322,7 @@ const InteractionForm = ({
         </div>
         
         <div className="mb-6">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="notes">
+          <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" htmlFor="notes">
             Notes
           </label>
           <div className="quill-container">
@@ -379,26 +379,26 @@ const InteractionForm = ({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-gray-800 p-6 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
-                    className="text-lg font-medium leading-6 text-gray-900"
+                    className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100"
                   >
                     Create New Contact
                   </Dialog.Title>
                   <div className="mt-2">
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-gray-500 dark:text-gray-300">
                       Enter the details for the new contact.
                     </p>
                   </div>
 
                   <div className="mt-4">
                     <div className="mb-4">
-                      <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="contactName">
+                      <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" htmlFor="contactName">
                         Name *
                       </label>
                       <input
-                        className="input-field"
+                        className="input-field dark:bg-gray-700 dark:text-gray-100"
                         id="contactName"
                         type="text"
                         value={newContactData.name}
@@ -408,11 +408,11 @@ const InteractionForm = ({
                     </div>
                     
                     <div className="mb-4">
-                      <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="contactEmail">
+                      <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" htmlFor="contactEmail">
                         Email
                       </label>
                       <input
-                        className="input-field"
+                        className="input-field dark:bg-gray-700 dark:text-gray-100"
                         id="contactEmail"
                         type="email"
                         value={newContactData.email || ''}
@@ -422,11 +422,11 @@ const InteractionForm = ({
                     </div>
                     
                     <div className="mb-4">
-                      <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="contactPhone">
+                      <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" htmlFor="contactPhone">
                         Phone
                       </label>
                       <input
-                        className="input-field"
+                        className="input-field dark:bg-gray-700 dark:text-gray-100"
                         id="contactPhone"
                         type="tel"
                         value={newContactData.phone || ''}
