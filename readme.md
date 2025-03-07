@@ -1,238 +1,169 @@
-### **Project Proposal: Personal CRM System**
+# Personal CRM
 
-#### **1\. Introduction**
+A lightweight, modern CRM application built with Next.js, React, Firebase, and Tailwind CSS to help you manage your contacts and interactions efficiently.
 
-This project is a **Personal CRM (Customer Relationship Management)** system designed to help users manage their personal and professional relationships. Users can log interactions with contacts, view past updates, and track important details. The system ensures **user-specific data isolation**, meaning each user only sees their own data. The tech stack includes **Firebase** for the database, **React** for the frontend, **Node.js** for the backend, and **Tailwind CSS** for styling.
-
-Technologies used
-This doesn't really matter, but is useful for the AI to understand more about this project. We are using the following technologies
-
-React with Next.js 14 App Router
-TailwindCSS
-Firebase Auth, Storage, and Database
-
-#### **2\. Key Features**
-
-1.  **User Authentication**:
-    
-    *   Secure login and registration using Firebase Authentication.
-        
-2.  **Home Page**:
-    
-    *   **New Interaction Input**: A form to log interactions with a searchable dropdown for contacts, a title field, rich text notes, and a date picker.
-        
-    *   **Previous Interactions Table**: Displays past interactions with columns for Title, Contact, and Date. Each row links to the **Interaction Detail Page**.
-        
-    *   **Upcoming Important Dates**: Shows the next 10 important dates (e.g., birthdays) with associated contacts. Each date/contact pair links to the **Individual Contact Page**.
-        
-3.  **Interaction Detail Page**:
-    
-    *   Displays full details of an interaction (title, contact, date, and notes).
-        
-    *   Allows users to **edit** or **delete** the interaction.
-        
-    *   Links back to the **Home Page**.
-        
-4.  **Contact Page**:
-    
-    *   Displays all contacts with options to **edit** or **delete**.
-        
-    *   Each contact name links to the **Individual Contact Page**.
-        
-    *   Includes an **Add New Contact** button.
-        
-5.  **Individual Contact Page**:
-    
-    *   Shows contact details (name, email, phone) with options to **edit** or **delete**.
-        
-    *   Lists all interactions linked to the contact, with each interaction title linking to the **Interaction Detail Page**.
-        
-    *   Links back to the **Contact Page**.
-        
-
-#### **3\. Tech Stack**
-
-*   **Frontend**:
-    
-    *   **React**: For building the user interface.
-        
-    *   **Tailwind CSS**: For styling.
-        
-    *   **Rich Text Editor**: Use **Quill** or **Draft.js** for notes.
-        
-*   **Backend**:
-    
-    *   **Node.js**: For server-side logic.
-        
-    *   **Express.js**: For building the REST API.
-        
-*   **Database**:
-    
-    *   **Firebase Firestore**: For real-time data storage.
-        
-        *   Collections:
-            
-            *   users: Stores user info (email, hashed password).
-                
-            *   contacts: Stores contact details linked to a user via userId.
-                
-            *   interactions: Stores interaction details linked to a user (userId) and a contact (contactId).
-                
-*   **Authentication**:
-    
-    *   **Firebase Authentication**: For secure login and registration.
-        
-*   **Other Tools**:
-    
-    *   **React Router**: For navigation between pages.
-        
-    *   **Axios**: For API requests.
-        
-    *   **Date-fns**: For date formatting.
-        
-
-#### **4\. Database Structure**
-
-1.  **Users**:
-    
-    *   userId (string)
-        
-    *   email (string)
-        
-    *   password (string, hashed)
-        
-2.  **Contacts**:
-    
-    *   contactId (string)
-        
-    *   userId (string, links to Users)
-        
-    *   name (string)
-        
-    *   email (string)
-        
-    *   phone (string)
-        
-    *   otherDetails (object)
-        
-3.  **Interactions**:
-    
-    *   interactionId (string)
-        
-    *   userId (string, links to Users)
-        
-    *   contactId (string, links to Contacts)
-        
-    *   title (string)
-        
-    *   notes (string, rich text)
-        
-    *   date (timestamp)
-        
-
-#### **5\. Data Isolation**
-
-To ensure users only see their own data:
-
-*   Use **Firebase Security Rules** to restrict access to data based on userId.
-    
-*   guide me through setting up firebase
-    
-
-#### **6\. Navigation Flow**
-
-*   **Home Page**:
-    
-    *   Links to:
-        
-        *   **Interaction Detail Page** (via rows in the Previous Interactions Table).
-            
-        *   **Individual Contact Page** (via contact names in the Upcoming Important Dates section).
-            
-*   **Interaction Detail Page**:
-    
-    *   Links to:
-        
-        *   **Individual Contact Page** (via the contact name).
-            
-        *   **Home Page** (via the Back Link).
-            
-*   **Contact Page**:
-    
-    *   Links to:
-        
-        *   **Individual Contact Page** (via contact names in the All Contacts List).
-            
-*   **Individual Contact Page**:
-    
-    *   Links to:
-        
-        *   **Interaction Detail Page** (via interaction titles in the Related Interactions List).
-            
-        *   **Contact Page** (via the Back Link).
-            
-
-#### **7\. Instructions for Junior Developer**
-
-1.  **Set Up the Project**:
-    
-    *   Initialize a React app with create-react-app.
-        
-    *   Install dependencies: firebase, react-router-dom, axios, tailwindcss, and a rich text editor like quill.
-        
-2.  **Build the Frontend**:
-    
-    *   Create components for each page: **Home Page**, **Interaction Detail Page**, **Contact Page**, and **Individual Contact Page**.
-        
-    *   Use **React Router** to handle navigation between pages.
-        
-    *   Style the app using **Tailwind CSS**.
-        
-3.  **Set Up Firebase**:
-    
-    *   Create a Firebase project and enable Firestore and Authentication.
-        
-    *   Configure Firebase in your app and set up security rules for data isolation.
-        
-4.  **Build the Backend**:
-    
-    *   Use **Node.js** and **Express.js** to create a REST API for handling database operations.
-        
-    *   Connect the frontend to the backend using **Axios**.
-        
-5.  **Test the App**:
-    
-    *   Ensure all pages and features work as expected.
-        
-    *   Test data isolation by logging in with different users and verifying they only see their own data
+![Personal CRM Screenshot](https://via.placeholder.com/800x400?text=Personal+CRM+Screenshot)
 
 ## Features
 
-### User Authentication
-- Sign up with email and password
-- Log in with existing credentials
-- **Sign in with Google**: One-click authentication using your Google account
-- Protected routes that require authentication
+- **Contact Management**: Store and organize your personal and professional contacts
+- **Interaction Tracking**: Log and track all your interactions with contacts
+- **Rich Text Notes**: Support for formatted notes with bold, italic, lists, and bullet points using ReactQuill
+- **User Authentication**: Secure login with email/password or Google authentication
+- **Responsive Design**: Works on desktop, tablet, and mobile devices
+- **Dark Mode Support**: Automatically adapts to your system preference
 
-### Contact Management
-- Add new contacts with name, email, phone, and notes
-- View a list of all contacts
-- View contact details
-- Edit and delete contacts
-- Add interactions directly from contact details
+## Tech Stack
 
-### Interaction Management
-- Log interactions with contacts
-- View all interactions in a chronological list
-- View interactions for a specific contact
-- Edit and delete interactions
-- **Create contacts on-the-fly**: When logging a new interaction, you can create a new contact without leaving the interaction form if the contact doesn't exist yet
-  - Enhanced dialog for creating new contacts with additional fields (email, phone)
-  - Seamless integration with the interaction form
-  - Visual indicators for creating new contacts
+- **Frontend**: Next.js, React, TypeScript
+- **Authentication**: Firebase Auth
+- **Database**: Firebase Firestore
+- **Styling**: Tailwind CSS
+- **Forms**: React Hook Form
+- **Rich Text Editor**: ReactQuill
+- **Date Handling**: date-fns
+- **Components**: Headless UI
 
-### UI Features
-- Responsive design for mobile and desktop
-- Dark mode support
-- Clean, modern interface with Tailwind CSS
-- Rich text editor for notes
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v16 or newer)
+- npm or yarn
+- A Firebase account
+
+### Installation
+
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/yourusername/personal-crm.git
+   cd personal-crm
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
+
+3. Create a Firebase project at [https://console.firebase.google.com/](https://console.firebase.google.com/)
+
+4. Create a `.env.local` file in the root directory with your Firebase configuration:
+   ```env
+   NEXT_PUBLIC_FIREBASE_API_KEY=your-api-key
+   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your-auth-domain
+   NEXT_PUBLIC_FIREBASE_PROJECT_ID=your-project-id
+   NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your-storage-bucket
+   NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your-messaging-sender-id
+   NEXT_PUBLIC_FIREBASE_APP_ID=your-app-id
+   ```
+
+5. Enable Email/Password and Google authentication in your Firebase project
+
+6. Set up Firestore Database in your Firebase project and create the following collections:
+   - `contacts`
+   - `interactions`
+
+7. Run the development server:
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
+
+8. Open [http://localhost:3000](http://localhost:3000) in your browser to see the app
+
+### Firebase Security Rules
+
+For appropriate security, add these rules to your Firestore database:
+
+```
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /contacts/{contactId} {
+      allow read, write: if request.auth != null && request.auth.uid == resource.data.userId;
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.userId;
+    }
+    match /interactions/{interactionId} {
+      allow read, write: if request.auth != null && request.auth.uid == resource.data.userId;
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.userId;
+    }
+  }
+}
+```
+
+## Application Structure
+
+```
+app/
+├── auth/                  # Authentication pages
+│   ├── signin/
+│   └── signup/
+├── components/            # Reusable React components
+├── contacts/              # Contact management pages
+│   ├── [id]/              # Contact details and edit
+│   └── new/               # New contact creation
+├── interactions/          # Interaction management pages
+│   ├── [id]/              # Interaction details and edit
+│   └── new/               # New interaction creation
+└── lib/                   # Utility functions and API
+```
+
+## Usage
+
+1. Sign up or sign in with email/password or Google
+2. Add contacts through the contacts page
+3. Log interactions with those contacts
+4. View and edit past interactions
+5. See a dashboard of recent contact activity
+
+## Customization
+
+### Styling
+
+This project uses Tailwind CSS. You can customize the look and feel by modifying the `tailwind.config.js` file.
+
+### Adding Features
+
+The codebase is organized to make it easy to add new features:
+
+- Add new components in the `app/components` directory
+- Modify database schema in the `app/lib/db.ts` file
+- Add new pages by creating the appropriate directory structure in the `app` folder
+
+## Deployment
+
+This application can be deployed on Vercel with minimal configuration:
+
+1. Push your code to GitHub
+2. Import the project in Vercel
+3. Add your environment variables in the Vercel dashboard
+4. Deploy!
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## Acknowledgments
+
+- [Next.js](https://nextjs.org/) - The React Framework
+- [Firebase](https://firebase.google.com/) - Backend services
+- [Tailwind CSS](https://tailwindcss.com/) - Styling
+- [ReactQuill](https://github.com/zenoamaro/react-quill) - Rich text editor
+- [React Hook Form](https://react-hook-form.com/) - Form handling
+
+---
+
+Made with ❤️ using Next.js and Firebase
